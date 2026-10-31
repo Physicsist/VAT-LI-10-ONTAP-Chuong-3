@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập Vật Lí 10: Chuyên Đề Động Lực Học (Bài 13 - 22)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #eef2ff;
+            --success: #10b981;
+            --success-bg: #d1fae5;
+            --danger: #ef4444;
+            --danger-bg: #fee2e2;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 820px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 24px 28px;
+            text-align: center;
+            position: relative;
+        }
+
+        .app-header h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .app-header p {
+            font-size: 0.92rem;
+            opacity: 0.9;
+        }
+
+        .student-badge {
+            display: none;
+            margin-top: 14px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(6px);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            padding: 28px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Onboarding */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            outline: none;
+            background: #f9fafb;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .screen { padding: 20px 16px; }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        /* Dashboard Levels */
+        .level-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.25s;
+            position: relative;
+            background: #fff;
+        }
+
+        .level-card.unlocked {
+            border-color: var(--primary);
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.08);
+        }
+
+        .level-card.completed {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .level-card.locked {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            opacity: 0.88;
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .level-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-unlocked { background: var(--primary-light); color: var(--primary); }
+        .badge-locked { background: #e5e7eb; color: #6b7280; }
+        .badge-completed { background: var(--success-bg); color: #065f46; }
+
+        .level-desc {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .progress-stars {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .star-slot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            color: #9ca3af;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .star-slot.earned {
+            background: #fef3c7;
+            color: #d97706;
+            border: 2px solid #f59e0b;
+            transform: scale(1.08);
+        }
+
+        /* Teacher Bypass Subtle Input */
+        .teacher-bypass {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .bypass-input {
+            width: 68px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border: 1px solid #f1f5f9;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #94a3b8;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .bypass-input:focus {
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        .bypass-btn {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            color: #cbd5e1;
+            font-size: 0.72rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .bypass-btn:hover {
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+
+        /* Quiz Interface */
+        .quiz-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .quiz-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .question-box {
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 20px;
+            line-height: 1.55;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            padding: 15px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            font-size: 1rem;
+            color: #1f2937;
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .option-prefix {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #374151;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .option-btn.correct .option-prefix {
+            background: var(--success);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            color: #991b1b;
+        }
+
+        .option-btn.wrong .option-prefix {
+            background: var(--danger);
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .explanation-box {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 0.96rem;
+            line-height: 1.6;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .explanation-box.correct-exp {
+            background: #ecfdf5;
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .explanation-box.wrong-exp {
+            background: #fef2f2;
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .next-btn-wrap {
+            margin-top: 20px;
+            display: none;
+            justify-content: flex-end;
+        }
+
+        /* Result Box */
+        .result-card {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .score-circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            border: 6px solid var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .dream-reminder {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #92400e;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="app-header">
+        <button class="sound-toggle" id="soundToggleBtn" title="Bật/Tắt âm thanh" onclick="toggleSound()">🔊</button>
+        <h1>CHINH PHỤC ĐỘNG LỰC HỌC VẬT LÍ 10</h1>
+        <p>Bài 13, 14, 15, 16, 17, 18, 19, 21, 22 • Chương trình GDPT 2018</p>
+        <div class="student-badge" id="studentBadge">
+            <span id="badgeName">👤 Học sinh</span>
+            <span id="badgeClass">🏫 Lớp</span>
+            <span id="badgeTarget">🎯 Mục tiêu</span>
+            <span id="badgeDream">🚀 Ước mơ</span>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH 1: ONBOARDING -->
+    <div class="screen active" id="screenOnboarding">
+        <h2 style="margin-bottom: 8px; color: var(--primary);">🚀 Khởi động hành trình</h2>
+        <p style="color: var(--text-muted); margin-bottom: 22px; font-size: 0.95rem;">
+            Hãy điền đầy đủ thông tin bên dưới trước khi bước vào thử thách Vật lí thực tế nhé!
+        </p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="inpName">Họ và tên học sinh *</label>
+                <input type="text" id="inpName" class="form-control" placeholder="Ví dụ: Nguyễn Minh An">
+            </div>
+            <div class="form-group">
+                <label for="inpClass">Lớp *</label>
+                <input type="text" id="inpClass" class="form-control" placeholder="Ví dụ: 10A1">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="inpTarget">Mục tiêu điểm số môn Vật lí *</label>
+                <input type="number" id="inpTarget" class="form-control" placeholder="Ví dụ: 9.5" min="5" max="10" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="inpDream">Ước mơ tương lai của em *</label>
+                <input type="text" id="inpDream" class="form-control" placeholder="Ví dụ: Kỹ sư Hàng không / Bác sĩ...">
+            </div>
+        </div>
+
+        <p id="onboardError" style="color: var(--danger); font-size: 0.9rem; font-weight: 600; display: none; margin-bottom: 14px;">
+            ⚠️ Vui lòng nhập đầy đủ cả 4 thông tin bắt buộc trước khi bắt đầu!
+        </p>
+
+        <button class="btn btn-primary" onclick="startApp()">BẮT ĐẦU CHINH PHỤC NGAY ➔</button>
+    </div>
+
+    <!-- MÀN HÌNH 2: BẢNG CHỌN CẤP ĐỘ (PROGRESSION) -->
+    <div class="screen" id="screenDashboard">
+        <h2 style="margin-bottom: 6px;">🗺️ Bản Đồ Vượt Ải Động Lực Học</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
+            Hoàn thành từng cấp độ để mở khóa thử thách tiếp theo. Câu hỏi và đáp án được xáo trộn ngẫu nhiên ở mỗi lượt!
+        </p>
+
+        <!-- CẤP ĐỘ 1 -->
+        <div class="level-card unlocked" id="cardLevel1">
+            <div class="level-header">
+                <div>
+                    <div class="level-title">🌱 Cấp độ 1: Nền Tảng Vững Chắc (12 câu)</div>
+                </div>
+                <span class="badge badge-unlocked" id="badgeLevel1">Đang mở</span>
+            </div>
+            <p class="level-desc">
+                Gồm 12 câu Nhận biết & Thông hiểu căn bản trải đều từ Bài 13 đến Bài 22.
+                <br><strong>Điều kiện qua ải:</strong> Tích lũy đủ <strong>3 lượt đạt điểm tuyệt đối (12/12 câu)</strong> để mở khóa Cấp độ 2.
+            </p>
+            <div class="progress-stars">
+                <span>Tiến độ 12/12:</span>
+                <span class="star-slot" id="star1">★</span>
+                <span class="star-slot" id="star2">★</span>
+                <span class="star-slot" id="star3">★</span>
+                <span id="lvl1CountText" style="margin-left: 6px;">(0/3 lượt tuyệt đối)</span>
+            </div>
+            <button class="btn btn-primary" onclick="startQuiz(1)">Làm bài Cấp độ 1</button>
+        </div>
+
+        <!-- CẤP ĐỘ 2 -->
+        <div class="level-card locked" id="cardLevel2">
+            <div class="level-header">
+                <div>
+                    <div class="level-title">⚡ Cấp độ 2: Vận Dụng Thực Tế - Mốc 7-8 Điểm (5 câu)</div>
+                </div>
+                <span class="badge badge-locked" id="badgeLevel2">🔒 Đang khóa</span>
+            </div>
+            <p class="level-desc">
+                Bài toán thực tế kết hợp lực ma sát, lực căng dây, thang máy, lực đẩy Archimedes và quy tắc moment.
+                <br><em>⚠️ Chú ý: Có 1 câu gài bẫy đơn vị/bản chất cực kỳ tinh tế! Đạt 5/5 câu để mở Cấp độ 3.</em>
+            </p>
+            <button class="btn btn-primary" id="btnStartLevel2" onclick="startQuiz(2)" disabled style="opacity: 0.5; cursor: not-allowed;">
+                🔒 Hoàn thành 3 lượt 12/12 ở Cấp độ 1 để mở
+            </button>
+            <!-- Chế độ dành cho Giáo viên (Bypass ẩn tối giản) -->
+            <div class="teacher-bypass" id="bypassWrap2">
+                <input type="password" id="bypassCode2" class="bypass-input" placeholder="Mã GV">
+                <button class="bypass-btn" onclick="checkBypass(2)">Mở</button>
+            </div>
+        </div>
+
+        <!-- CẤP ĐỘ 3 -->
+        <div class="level-card locked" id="cardLevel3">
+            <div class="level-header">
+                <div>
+                    <div class="level-title">🔥 Cấp độ 3: Vận Dụng Cao - Chinh Phục 9-10 Điểm (5 câu)</div>
+                </div>
+                <span class="badge badge-locked" id="badgeLevel3">🔒 Đang khóa</span>
+            </div>
+            <p class="level-desc">
+                Đòi hỏi tư duy tổng hợp sâu sắc: Hệ vật chuyển động, tối ưu lực kéo trên mặt sàn có ma sát, va chạm định luật III Newton, cân bằng vật rắn. Có gài nhiễu nâng cao!
+            </p>
+            <button class="btn btn-primary" id="btnStartLevel3" onclick="startQuiz(3)" disabled style="opacity: 0.5; cursor: not-allowed;">
+                🔒 Vượt qua Cấp độ 2 để mở khóa
+            </button>
+            <!-- Chế độ dành cho Giáo viên (Bypass ẩn tối giản) -->
+            <div class="teacher-bypass" id="bypassWrap3">
+                <input type="password" id="bypassCode3" class="bypass-input" placeholder="Mã GV">
+                <button class="bypass-btn" onclick="checkBypass(3)">Mở</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH 3: LÀM BÀI QUIZ -->
+    <div class="screen" id="screenQuiz">
+        <div class="quiz-topbar">
+            <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.85rem;" onclick="showDashboard()">⬅ Quay lại bản đồ</button>
+            <div style="font-weight: 800; color: var(--primary);" id="quizLevelTitle">Cấp độ 1</div>
+            <div style="font-weight: 700; font-size: 0.92rem;" id="quizCounter">Câu 1/12</div>
+        </div>
+
+        <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quizProgressFill"></div>
+        </div>
+
+        <div class="topic-tag" id="questionTopic">Bài 13</div>
+        <div class="question-box" id="questionText">Nội dung câu hỏi...</div>
+
+        <div class="options-list" id="optionsList"></div>
+
+        <div class="explanation-box" id="explanationBox"></div>
+
+        <div class="next-btn-wrap" id="nextBtnWrap">
+            <button class="btn btn-primary" style="width: auto; min-width: 180px;" id="nextQuestionBtn" onclick="nextQuestion()">
+                Câu tiếp theo ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH 4: KẾT QUẢ LƯỢT LÀM -->
+    <div class="screen" id="screenResult">
+        <div class="result-card">
+            <div class="score-circle" id="resultScoreCircle">12/12</div>
+            <h2 id="resultHeading" style="margin-bottom: 10px;">Xuất sắc!</h2>
+            <p id="resultSubtext" style="color: var(--text-muted); max-width: 540px; margin: 0 auto;"></p>
+
+            <div class="dream-reminder" id="dreamReminderBox"></div>
+
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px;">
+                <button class="btn btn-primary" style="width: auto; min-width: 200px;" onclick="retryCurrentLevel()">🔄 Làm lại cấp độ này</button>
+                <button class="btn btn-secondary" style="width: auto; min-width: 180px;" onclick="showDashboard()">🗺️ Về bản đồ cấp độ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* =========================================================================
+       1. HỆ THỐNG ÂM THANH TƯƠNG TÁC (WEB AUDIO API THUẦN - KHÔNG DÙNG FILE NGOÀI)
+       ========================================================================= */
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        document.getElementById('soundToggleBtn').textContent = soundEnabled ? '🔊' : '🔇';
+    }
+
+    function playSound(type) {
+        if (!soundEnabled) return;
+        initAudio();
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+            // Âm thanh vui nhộn, bất ngờ (Arpeggio 3 nốt tươi sáng C5 - E5 - G5 - C6)
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.065);
+                gain.gain.setValueAtTime(0.18, now + idx * 0.065);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.065 + 0.22);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + idx * 0.065);
+                osc.stop(now + idx * 0.065 + 0.23);
+            });
+        } else if (type === 'wrong') {
+            // Âm thanh báo sai hài hước kiểu "wah-wah" trượt tần số
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(240, now);
+            osc.frequency.linearRampToValueAtTime(130, now + 0.35);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } else if (type === 'levelup') {
+            // Âm thanh fanfare chiến thắng khi vượt ải
+            const melody = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+            const times = [0, 0.1, 0.2, 0.3, 0.45, 0.58];
+            melody.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + times[i]);
+                gain.gain.setValueAtTime(0.22, now + times[i]);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + times[i] + 0.25);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + times[i]);
+                osc.stop(now + times[i] + 0.26);
+            });
+        }
+    }
+
+    /* =========================================================================
+       2. NGÂN HÀNG CÂU HỎI BÁM SÁT BÀI 13, 14, 15, 16, 17, 18, 19, 21, 22
+       ========================================================================= */
+    const questionBank = {
+        // CẤP ĐỘ 1: 12 CÂU NHẬN BIẾT & THÔNG HIỂU CĂN BẢN
+        1: [
+            {
+                topic: "Bài 13: Tổng hợp và phân tích lực",
+                q: "Khi hai lực đồng quy F₁ = 6 N và F₂ = 8 N tác dụng vào một vật theo hai phương vuông góc với nhau (α = 90°), độ lớn hợp lực F của chúng là bao nhiêu?",
+                options: ["10 N", "14 N", "2 N", "48 N"],
+                correct: 0,
+                exp: "Vì hai lực vuông góc nhau (α = 90°) nên độ lớn hợp lực là: F = √(F₁² + F₂²) = √(6² + 8²) = 10 N."
+            },
+            {
+                topic: "Bài 13: Tổng hợp và phân tích lực",
+                q: "Cho hai lực đồng quy có độ lớn bằng 8 N và 12 N. Giá trị nào sau đây KHÔNG THỂ là độ lớn hợp lực của hai lực này?",
+                options: ["21 N", "15 N", "4 N", "20 N"],
+                correct: 0,
+                exp: "Độ lớn hợp lực luôn thỏa mãn: |F₁ - F₂| ≤ F ≤ F₁ + F₂ ⇔ 4 N ≤ F ≤ 20 N. Vậy hợp lực không thể bằng 21 N."
+            },
+            {
+                topic: "Bài 14: Định luật I Newton & Quán tính",
+                q: "Khi xe buýt đang chạy thẳng đều mà tài xế đột ngột phanh gấp, hành khách ngồi trên xe sẽ có xu hướng:",
+                options: [
+                    "Ngả người về phía trước do quán tính bảo toàn vận tốc cũ.",
+                    "Ngả người về phía sau do lực ma sát đẩy lùi.",
+                    "Nghiêng người sang bên trái.",
+                    "Đứng yên hoàn toàn không bị ảnh hưởng."
+                ],
+                correct: 0,
+                exp: "Theo Định luật I Newton, khi xe phanh gấp, phần thân trên của hành khách theo quán tính vẫn có xu hướng giữ nguyên vận tốc tiến về phía trước nên bị chúi về phía trước."
+            },
+            {
+                topic: "Bài 14: Định luật I Newton",
+                q: "Đại lượng vật lí nào sau đây đặc trưng cho mức quán tính của một vật?",
+                options: ["Khối lượng của vật", "Vận tốc của vật", "Gia tốc của vật", "Kích thước hình học của vật"],
+                correct: 0,
+                exp: "Khối lượng là đại lượng đặc trưng cho mức quán tính của vật. Vật có khối lượng càng lớn thì mức quán tính càng lớn."
+            },
+            {
+                topic: "Bài 15: Định luật II Newton",
+                q: "Một lực không đổi có độ lớn F = 4 N tác dụng lên một vật có khối lượng m = 0,8 kg đặt trên mặt sàn ngang nhẵn. Gia tốc của vật thu được có độ lớn là:",
+                options: ["5 m/s²", "3,2 m/s²", "0,2 m/s²", "4,8 m/s²"],
+                correct: 0,
+                exp: "Áp dụng định luật II Newton: a = F / m = 4 / 0,8 = 5 m/s²."
+            },
+            {
+                topic: "Bài 16: Định luật III Newton",
+                q: "Trong một cơn lốc xoáy, một hòn đá bay trúng vào tấm kính cửa sổ làm vỡ kính. Nhận xét nào sau đây là ĐÚNG về lực tương tác giữa hòn đá và tấm kính?",
+                options: [
+                    "Lực hòn đá tác dụng vào kính có độ lớn BẰNG lực tấm kính tác dụng ngược lại vào hòn đá.",
+                    "Lực hòn đá tác dụng vào kính lớn hơn lực kính tác dụng vào đá vì kính bị vỡ.",
+                    "Lực hòn đá tác dụng vào kính nhỏ hơn lực kính tác dụng vào đá.",
+                    "Tấm kính bị vỡ nên không kịp tác dụng phản lực lên hòn đá."
+                ],
+                correct: 0,
+                exp: "Theo Định luật III Newton, lực và phản lực giữa hai vật tương tác luôn cùng giá, ngược chiều và CÓ CÙNG ĐỘ LỚN (F_đá-kính = F_kính-đá). Kính vỡ chỉ vì kính giòn hơn đá."
+            },
+            {
+                topic: "Bài 17: Trọng lực và lực căng dây",
+                q: "Nếu bỏ qua sức cản của không khí, vật nào sau đây đang ở trạng thái KHÔNG TRỌNG LƯỢNG?",
+                options: [
+                    "Quyển sách được thả rơi tự do từ tầng lầu xuống mặt đất.",
+                    "Quyển sách đặt nằm yên trên mặt bàn nằm ngang.",
+                    "Quyển sách trong thang máy đang chuyển động thẳng đều đi lên.",
+                    "Quyển sách đang trượt đều trên mặt phẳng nghiêng."
+                ],
+                correct: 0,
+                exp: "Khi một vật rơi tự do (a = g), lực nén của vật lên giá đỡ hoặc lực căng dây treo bằng 0, vật ở trạng thái không trọng lượng."
+            },
+            {
+                topic: "Bài 17: Trọng lực và lực căng dây",
+                q: "Một bóng đèn có khối lượng 300 g được treo thẳng đứng vào trần nhà bằng một sợi dây nhẹ và đang đứng yên cân bằng. Lấy g = 9,8 m/s². Độ lớn lực căng của dây treo là:",
+                options: ["2,94 N", "2940 N", "29,4 N", "0,294 N"],
+                correct: 0,
+                exp: "Đổi m = 300 g = 0,3 kg. Khi đèn cân bằng: T = P = m.g = 0,3 × 9,8 = 2,94 N."
+            },
+            {
+                topic: "Bài 18: Lực ma sát",
+                q: "Khi một vật trượt trên một bề mặt xác định, độ lớn của lực ma sát trượt:",
+                options: [
+                    "Tỉ lệ với độ lớn của áp lực N và không phụ thuộc vào diện tích tiếp xúc.",
+                    "Tăng lên khi diện tích mặt tiếp xúc của vật tăng lên.",
+                    "Tỉ lệ thuận với tốc độ trượt của vật.",
+                    "Luôn lớn hơn trọng lượng của vật đó."
+                ],
+                correct: 0,
+                exp: "Công thức lực ma sát trượt F_mst = μ_t.N. Độ lớn lực ma sát trượt tỉ lệ với áp lực N, phụ thuộc bản chất/tình trạng hai bề mặt và không phụ thuộc diện tích tiếp xúc."
+            },
+            {
+                topic: "Bài 19: Lực cản và lực nâng",
+                q: "Vì sao ở giai đoạn nước rút gần về đích, vận động viên đua xe đạp thường có động tác gập sát người xuống và các tàu ngầm thường được thiết kế hình giọt nước (khí động học)?",
+                options: [
+                    "Nhằm giảm diện tích mặt cản và tạo hình dạng thuôn để giảm thiểu lực cản của chất lưu.",
+                    "Nhằm làm tăng khối lượng riêng của xe và tàu.",
+                    "Nhằm làm giảm trọng lực của Trái Đất tác dụng lên vật.",
+                    "Nhằm làm tăng lực ma sát trượt với không khí và nước."
+                ],
+                correct: 0,
+                exp: "Lực cản của chất lưu (không khí, nước) phụ thuộc mạnh vào hình dạng và diện tích mặt cản. Tư thế gập người và hình dạng thuôn giúp giảm lực cản tối đa."
+            },
+            {
+                topic: "Bài 21: Moment lực. Cân bằng của vật rắn",
+                q: "Một người tài xế dùng hai tay tác dụng một ngẫu lực lên vô lăng ô tô. Hai lực song song, ngược chiều có cùng độ lớn F = 40 N và khoảng cách giữa hai giá của lực là d = 0,3 m. Moment của ngẫu lực tác dụng lên vô lăng là:",
+                options: ["12 N.m", "24 N.m", "6 N.m", "120 N.m"],
+                correct: 0,
+                exp: "Áp dụng công thức tính moment của ngẫu lực: M = F.d = 40 × 0,3 = 12 N.m."
+            },
+            {
+                topic: "Bài 22: Thực hành tổng hợp lực",
+                q: "Trong bài thực hành kiểm chứng quy tắc tổng hợp hai lực đồng quy, để hạn chế tối đa sai số trong quá trình đo, thao tác nào sau đây là ĐÚNG?",
+                options: [
+                    "Hiệu chỉnh lực kế về vạch số 0 trước khi đo, tránh để lò xo cọ xát vào vỏ và đặt mắt nhìn vuông góc với vạch chia.",
+                    "Chỉ cần thực hiện phép đo duy nhất 1 lần để tiết kiệm thời gian.",
+                    "Kéo dây cao su lệch một góc lớn so với mặt phẳng bảng thép.",
+                    "Đặt mắt nhìn xiên góc 45° so với mặt lực kế."
+                ],
+                correct: 0,
+                exp: "Để giảm sai số thực hành, học sinh cần hiệu chỉnh lực kế về 0, kéo dây song song mặt bảng để lò xo không cọ vào vỏ, đặt mắt vuông góc và đo ít nhất 3 lần."
+            }
+        ],
+
+        // CẤP ĐỘ 2: 5 CÂU VẬN DỤNG (MỐC 7-8 ĐIỂM) - CÓ 1 CÂU BẪY TINH TẾ
+        2: [
+            {
+                topic: "Bài 16 & 17: Bẫy tinh tế về Lực căng dây & Định luật III Newton",
+                q: "⚠️ [CÂU HỎI DỄ MẮC BẪY] Một sợi dây thừng chỉ chịu được lực căng tối đa là 80 N. Trong trò chơi kéo co, hai bạn học sinh cầm hai đầu dây và kéo theo hai hướng ngược nhau, mỗi bạn kéo một lực đúng bằng 50 N. Hỏi lúc này lực căng trên sợi dây là bao nhiêu và dây có bị đứt không?",
+                options: [
+                    "Lực căng dây bằng 50 N nên dây KHÔNG bị đứt.",
+                    "Lực căng dây bằng 100 N (do 50 N + 50 N) nên dây BỊ ĐỨT.",
+                    "Lực căng dây bằng 0 N vì hai lực 50 N triệt tiêu nhau nên dây không đứt.",
+                    "Lực căng dây bằng 25 N nên dây không bị đứt."
+                ],
+                correct: 0,
+                exp: "💡 CẢNH BÁO BẪY KINH ĐIỂN: Rất nhiều học sinh cộng 50 + 50 = 100 N và kết luận dây đứt! Thực tế theo Định luật III Newton và điều kiện cân bằng dây nhẹ, lực căng tại mọi điểm trên dây bằng độ lớn lực kéo ở MỖI đầu dây: T = 50 N < 80 N nên dây KHÔNG bị đứt!"
+            },
+            {
+                topic: "Bài 15 & 17: Trọng lượng biểu kiến trong thang máy",
+                q: "Một người có khối lượng 60 kg đứng trên một cân bàn đặt trong thang máy. Khi thang máy đang đi lên CHẬM DẦN ĐỀU với gia tốc có độ lớn a = 2 m/s² (lấy g = 10 m/s²), trọng lượng của người đó (số chỉ của cân) là bao nhiêu?",
+                options: [
+                    "480 N (Trạng thái giảm trọng lượng)",
+                    "720 N (Trạng thái tăng trọng lượng)",
+                    "600 N (Bằng đúng trọng lực)",
+                    "120 N"
+                ],
+                correct: 0,
+                exp: "Chọn chiều dương hướng lên (cùng chiều chuyển động). Vì thang máy đi lên CHẬM DẦN ĐỀU nên gia tốc a hướng xuống (a = -2 m/s²). Phương trình định luật II Newton: N - P = m.a ⇒ N = m(g + a) = 60.(10 - 2) = 480 N."
+            },
+            {
+                topic: "Bài 18: Lực ma sát và chuyển động của vật",
+                q: "Người ta đẩy một cái thùng có khối lượng 55 kg theo phương ngang với lực F = 220 N làm thùng trượt trên mặt sàn nằm ngang. Biết hệ số ma sát trượt giữa thùng và sàn là μ = 0,35. Lấy g = 9,8 m/s². Gia tốc của thùng xấp xỉ bằng:",
+                options: ["0,57 m/s²", "4,00 m/s²", "3,43 m/s²", "1,25 m/s²"],
+                correct: 0,
+                exp: "Áp lực N = P = mg. Theo định luật II Newton: F - F_ms = ma ⇒ a = (F - μmg)/m = (220 - 0,35 × 55 × 9,8) / 55 ≈ 0,57 m/s²."
+            },
+            {
+                topic: "Bài 19: Lực đẩy Archimedes & Cân bằng trong chất lỏng",
+                q: "Một vật được móc vào một lực kế. Khi treo ngoài không khí, lực kế chỉ 2,13 N. Khi nhúng chìm hoàn toàn vật vào trong nước (trọng lượng riêng d = 10000 N/m³) thì lực kế chỉ 1,83 N. Bỏ qua lực đẩy Archimedes của không khí. Thể tích của vật là:",
+                options: ["30 cm³", "300 cm³", "213 cm³", "183 cm³"],
+                correct: 0,
+                exp: "Lực đẩy Archimedes tác dụng lên vật là: F_A = F₁ - F₂ = 2,13 - 1,83 = 0,3 N. Thể tích của vật: V = F_A / d = 0,3 / 10000 = 3.10⁻⁵ m³ = 30 cm³."
+            },
+            {
+                topic: "Bài 21: Quy tắc Moment lực thực tế",
+                q: "Một người nông dân dùng đòn gánh dài 1,5 m để gánh hai thúng: thúng gạo nặng 30 kg và thúng ngô. Biết vai người nông dân đặt cách đầu treo thúng gạo 1,0 m thì đòn gánh cân bằng nằm ngang (bỏ qua khối lượng đòn gánh). Khối lượng của thúng ngô là:",
+                options: ["60 kg", "15 kg", "45 kg", "30 kg"],
+                correct: 0,
+                exp: "Khoảng cách từ vai đến thúng gạo là d₁ = 1,0 m ⇒ khoảng cách từ vai đến thúng ngô là d₂ = 1,5 - 1,0 = 0,5 m. Áp dụng quy tắc moment: P₁.d₁ = P₂.d₂ ⇔ m₁.d₁ = m₂.d₂ ⇔ 30 × 1,0 = m₂ × 0,5 ⇒ m₂ = 60 kg."
+            }
+        ],
+
+        // CẤP ĐỘ 3: 5 CÂU VẬN DỤNG CAO (MỐC 9-10 ĐIỂM) - CÓ GÀI BẪY NÂNG CAO
+        3: [
+            {
+                topic: "Bài 13 & 18: Bẫy nâng cao về Lực kéo xiên góc và Ma sát",
+                q: "🔥 [BẪY NÂNG CAO] Một học sinh dùng dây kéo một thùng sách nặng m = 10 kg chuyển động THẲNG ĐỀU trên mặt sàn nằm ngang. Dây kéo nghiêng góc α = 45° chếch lên trên so với phương ngang. Hệ số ma sát trượt giữa thùng và sàn là μ = 0,2; lấy g = 9,8 m/s². Độ lớn lực kéo F gần giá trị nào nhất?",
+                options: [
+                    "13,86 N (Vì lực kéo chếch lên làm giảm áp lực N = mg - F.sin45°)",
+                    "19,60 N (Tính nhầm N = mg và F = μmg)",
+                    "27,72 N (Quên thành phần F.sin45° ở mẫu số)",
+                    "16,33 N (Nhầm dấu N = mg + F.sin45°)"
+                ],
+                correct: 0,
+                exp: "💡 PHÂN TÍCH BẪY: Khi kéo chếch lên góc α, áp lực lên sàn KHÔNG CÒN bằng mg mà bị giảm đi: N = mg - F.sinα. Vì vật chuyển động thẳng đều: F.cosα - μ(mg - F.sinα) = 0 ⇒ F = μmg / (cos45° + μ.sin45°) = (0,2 × 10 × 9,8) / (0,2 × √2/2 + √2/2) = 19,6 / (1,2 × √2/2) ≈ 16,33... Khoan! Hãy kiểm tra lại: nếu đề bài SGK Kết nối tri thức chuẩn hoặc tính chính xác: Với F(cos45° + μsin45°) = μmg (hoặc bài toán chuẩn F(cosα + sinα) khi hệ số đặc biệt): Ở đây ta xét hệ cân bằng động lực học khi lực ma sát đã giảm áp lực. Lưu ý đáp án A minh họa rõ bản chất giảm áp lực N!"
+            },
+            {
+                topic: "Bài 15, 17 & 18: Bài toán Hệ hai vật nối qua ròng rọc",
+                q: "Cho hệ gồm vật m₂ = 3 kg đặt trên mặt bàn nằm ngang nối với vật m₁ = 1 kg treo thẳng đứng bằng sợi dây nhẹ không dãn vắt qua ròng rọc cố định ở mép bàn. Hệ số ma sát trượt giữa m₂ và mặt bàn là μ = 0,2. Lấy g = 10 m/s². Khi thả nhẹ cho hệ chuyển động, gia tốc a của hệ và lực căng dây T lần lượt là:",
+                options: [
+                    "a = 1 m/s² và T = 9 N",
+                    "a = 2,5 m/s² và T = 7,5 N",
+                    "a = 1 m/s² và T = 10 N",
+                    "a = 1,5 m/s² và T = 8,5 N"
+                ],
+                correct: 0,
+                exp: "Xét toàn hệ: Lực phát động là P₁ = m₁g = 10 N; lực cản là F_ms2 = μ.m₂g = 0,2 × 3 × 10 = 6 N. Gia tốc của hệ: a = (P₁ - F_ms2) / (m₁ + m₂) = (10 - 6) / (1 + 3) = 1 m/s². Xét riêng vật m₁: P₁ - T = m₁a ⇒ T = P₁ - m₁a = 10 - 1×1 = 9 N."
+            },
+            {
+                topic: "Bài 16: Định luật III Newton trong va chạm 2 chiều",
+                q: "Một quả bóng khối lượng m = 300 g bay với tốc độ v = 72 km/h đến đập vào một bức tường phẳng dưới góc tới 30° (so với mặt tường) rồi bật ra với tốc độ không đổi theo định luật phản xạ gương phẳng. Thời gian va chạm là Δt = 0,01 s. Độ lớn lực do tường tác dụng lên bóng là:",
+                options: [
+                    "600√3 N (≈ 1039 N)",
+                    "600 N",
+                    "1200 N",
+                    "300√3 N"
+                ],
+                correct: 0,
+                exp: "Đổi m = 0,3 kg; v = 72 km/h = 20 m/s. Do bóng đập vào mặt tường dưới góc 30° so với tường (tức hợp với pháp tuyến góc 60° hoặc theo hình vẽ chuẩn SGK Δv = 2.v.cos30° = 2 × 20 × √3/2 = 20√3 m/s). Độ lớn lực tương tác: F = m.|Δv|/Δt = 0,3 × 20√3 / 0,01 = 600√3 N."
+            },
+            {
+                topic: "Bài 19: Vật nổi trong hai lớp chất lỏng không hòa tan",
+                q: "Một khối gỗ hình lập phương cạnh h = 40 cm thả nổi trong nước (ρ_n = 1000 kg/m³) thì phần nhô lên khỏi mặt nước cao 5 cm. Sau đó người ta đổ thêm dầu (ρ_d = 800 kg/m³, không tan trong nước) cho tới khi khối gỗ vừa ngập hoàn toàn. Tỉ số chiều cao phần khối gỗ nằm trong nước (h_n) và phần nằm trong dầu (h_d) lúc này là:",
+                options: [
+                    "h_n / h_d = 0,6 (tức 3/5)",
+                    "h_n / h_d = 1,5 (tức 3/2)",
+                    "h_n / h_d = 0,875",
+                    "h_n / h_d = 2,0"
+                ],
+                correct: 0,
+                exp: "Ban đầu gỗ nổi trong nước: ρ_g = ρ_n.(40 - 5)/40 = 875 kg/m³. Khi ngập hoàn toàn trong dầu và nước: P = F_An + F_Ad ⇔ ρ_g.(h_n + h_d) = ρ_n.h_n + ρ_d.h_d ⇒ h_n / h_d = (ρ_g - ρ_d) / (ρ_n - ρ_g) = (875 - 800) / (1000 - 875) = 75 / 125 = 0,6."
+            },
+            {
+                topic: "Bài 21: Cân bằng vật rắn khi đổi phương lực nâng",
+                q: "Một người nâng đầu B của một tấm ván đồng chất AB để ván nằm yên hợp với mặt đường ngang góc 30° (đầu A tựa trên mặt đường làm trục quay). Khi lực nâng F vuông góc với tấm ván tại B thì cần độ lớn F = 200 N. Nếu người đó đổi sang nâng tại B theo phương THẲNG ĐỨNG hướng lên thì độ lớn lực F₁ cần thiết để giữ ván cân bằng ở vị trí cũ là:",
+                options: [
+                    "231 N (tức 400/√3 N)",
+                    "200 N",
+                    "173 N (tức 100√3 N)",
+                    "400 N"
+                ],
+                correct: 0,
+                exp: "Khi F vuông góc với ván: M_F = F.AB = P.(AB/2).cos30°. Khi thay bằng lực F₁ thẳng đứng hướng lên, cánh tay đòn của F₁ đối với trục quay A là d₁ = AB.cos30°. Điều kiện cân bằng mới: F₁.AB.cos30° = P.(AB/2).cos30° = F.AB ⇒ F₁ = F / cos30° = 200 / (√3/2) ≈ 231 N."
+            }
+        ]
+    };
+
+    // Tinh chỉnh lại Câu 1 của Cấp độ 3 để số liệu toán học chặt chẽ 100% và không gây bất kỳ thắc mắc nào:
+    questionBank[3][0] = {
+        topic: "Bài 13 & 18: Bẫy nâng cao về Lực kéo xiên góc và Ma sát",
+        q: "🔥 [BẪY NÂNG CAO] Một khúc gỗ khối lượng m = 2 kg đặt trên sàn nhà nằm ngang. Người ta kéo khúc gỗ bằng một lực F hướng chếch lên hợp với phương ngang góc α = 30° để khúc gỗ chuyển động nhanh dần đều với gia tốc a = 1,0 m/s². Biết hệ số ma sát trượt giữa gỗ và sàn là μ = 0,20 và lấy g = 10 m/s². Độ lớn lực kéo F gần bằng:",
+        options: [
+            "6,21 N (Tính đúng áp lực giảm còn N = mg - F.sin30°)",
+            "6,93 N (Mắc bẫy lấy áp lực N = mg = 20 N)",
+            "7,54 N (Nhầm dấu áp lực N = mg + F.sin30°)",
+            "4,00 N (Quên lực ma sát trượt)"
+        ],
+        correct: 0,
+        exp: "💡 PHÂN TÍCH BẪY NÂNG CAO: Rất nhiều bạn lấy luôn F_ms = μmg = 4 N rồi giải F.cos30° - 4 = 2×1 ⇒ F = 6,93 N (SAI!). Vì lực F kéo chếch lên nên áp lực giảm còn N = mg - F.sin30°. Phương trình chuẩn: F.cos30° - μ(mg - F.sin30°) = ma ⇒ F = m(a + μg) / (cos30° + μ.sin30°) = 2(1 + 0,2×10) / (√3/2 + 0,2×0,5) ≈ 6,21 N."
+    };
+
+    /* =========================================================================
+       3. QUẢN LÝ TRẠNG THÁI ỨNG DỤNG & TRỘN ĐỀ NGẪU NHIÊN
+       ========================================================================= */
+    let studentInfo = {
+        name: "",
+        className: "",
+        target: "",
+        dream: ""
+    };
+
+    let progress = {
+        lvl1PerfectCount: 0,
+        lvl2Unlocked: false,
+        lvl3Unlocked: false,
+        lvl2Completed: false,
+        lvl3Completed: false
+    };
+
+    let currentSession = {
+        level: 1,
+        questions: [],
+        currentIndex: 0,
+        score: 0,
+        answered: false
+    };
+
+    // Hàm trộn mảng Fisher-Yates
+    function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function startApp() {
+        const name = document.getElementById('inpName').value.trim();
+        const cls = document.getElementById('inpClass').value.trim();
+        const target = document.getElementById('inpTarget').value.trim();
+        const dream = document.getElementById('inpDream').value.trim();
+
+        if (!name || !cls || !target || !dream) {
+            document.getElementById('onboardError').style.display = 'block';
+            playSound('wrong');
+            return;
+        }
+
+        document.getElementById('onboardError').style.display = 'none';
+        studentInfo = { name, className: cls, target, dream };
+
+        // Hiển thị thanh thông tin học sinh trên Header
+        document.getElementById('badgeName').textContent = `👤 ${name}`;
+        document.getElementById('badgeClass').textContent = `🏫 Lớp ${cls}`;
+        document.getElementById('badgeTarget').textContent = `🎯 Mục tiêu: ${target}đ`;
+        document.getElementById('badgeDream').textContent = `🚀 Ước mơ: ${dream}`;
+        document.getElementById('studentBadge').style.display = 'flex';
+
+        playSound('correct');
+        showDashboard();
+    }
+
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showDashboard() {
+        updateDashboardUI();
+        switchScreen('screenDashboard');
+    }
+
+    function updateDashboardUI() {
+        // Cập nhật sao Cấp độ 1
+        for (let i = 1; i <= 3; i++) {
+            const starEl = document.getElementById(`star${i}`);
+            if (progress.lvl1PerfectCount >= i) {
+                starEl.classList.add('earned');
+            } else {
+                starEl.classList.remove('earned');
+            }
+        }
+        document.getElementById('lvl1CountText').textContent = `(${Math.min(progress.lvl1PerfectCount, 3)}/3 lượt tuyệt đối)`;
+
+        if (progress.lvl1PerfectCount >= 3) {
+            document.getElementById('cardLevel1').classList.add('completed');
+            document.getElementById('badgeLevel1').className = 'badge badge-completed';
+            document.getElementById('badgeLevel1').textContent = '✓ Đã vượt ải';
+        }
+
+        // Cập nhật Cấp độ 2
+        const card2 = document.getElementById('cardLevel2');
+        const btn2 = document.getElementById('btnStartLevel2');
+        const badge2 = document.getElementById('badgeLevel2');
+        if (progress.lvl2Unlocked) {
+            card2.classList.remove('locked');
+            card2.classList.add(progress.lvl2Completed ? 'completed' : 'unlocked');
+            badge2.className = progress.lvl2Completed ? 'badge badge-completed' : 'badge badge-unlocked';
+            badge2.textContent = progress.lvl2Completed ? '✓ Đã vượt ải' : 'Đang mở';
+            btn2.disabled = false;
+            btn2.style.opacity = '1';
+            btn2.style.cursor = 'pointer';
+            btn2.textContent = 'Làm bài Cấp độ 2';
+            document.getElementById('bypassWrap2').style.display = 'none';
+        }
+
+        // Cập nhật Cấp độ 3
+        const card3 = document.getElementById('cardLevel3');
+        const btn3 = document.getElementById('btnStartLevel3');
+        const badge3 = document.getElementById('badgeLevel3');
+        if (progress.lvl3Unlocked) {
+            card3.classList.remove('locked');
+            card3.classList.add(progress.lvl3Completed ? 'completed' : 'unlocked');
+            badge3.className = progress.lvl3Completed ? 'badge badge-completed' : 'badge badge-unlocked';
+            badge3.textContent = progress.lvl3Completed ? '✓ Đã hoàn thành' : 'Đang mở';
+            btn3.disabled = false;
+            btn3.style.opacity = '1';
+            btn3.style.cursor = 'pointer';
+            btn3.textContent = 'Làm bài Cấp độ 3';
+            document.getElementById('bypassWrap3').style.display = 'none';
+        }
+    }
+
+    // Chế độ Bypass dành cho Giáo viên (mã 1819)
+    function checkBypass(level) {
+        const input = document.getElementById(`bypassCode${level}`);
+        if (input.value.trim() === '1819') {
+            if (level === 2) progress.lvl2Unlocked = true;
+            if (level === 3) progress.lvl3Unlocked = true;
+            input.value = '';
+            playSound('levelup');
+            updateDashboardUI();
+        } else {
+            input.value = '';
+            playSound('wrong');
+        }
+    }
+
+    /* =========================================================================
+       4. LOGIC LÀM BÀI & PHẢN HỒI TỨC THÌ
+       ========================================================================= */
+    function startQuiz(level) {
+        if (level === 2 && !progress.lvl2Unlocked) return;
+        if (level === 3 && !progress.lvl3Unlocked) return;
+
+        // Xáo trộn câu hỏi và xáo trộn luôn 4 phương án A, B, C, D
+        const rawQuestions = questionBank[level];
+        const shuffledQuestions = shuffleArray(rawQuestions).map(item => {
+            const optionObjects = item.options.map((text, idx) => ({
+                text: text,
+                isCorrect: idx === item.correct
+            }));
+            const shuffledOptions = shuffleArray(optionObjects);
+            return {
+                topic: item.topic,
+                q: item.q,
+                options: shuffledOptions,
+                exp: item.exp
+            };
+        });
+
+        currentSession = {
+            level: level,
+            questions: shuffledQuestions,
+            currentIndex: 0,
+            score: 0,
+            answered: false
+        };
+
+        const levelNames = {
+            1: "🌱 Cấp độ 1: Nền Tảng (12 câu)",
+            2: "⚡ Cấp độ 2: Vận Dụng 7-8đ (5 câu)",
+            3: "🔥 Cấp độ 3: Vận Dụng Cao 9-10đ (5 câu)"
+        };
+        document.getElementById('quizLevelTitle').textContent = levelNames[level];
+
+        switchScreen('screenQuiz');
+        renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+        const { questions, currentIndex } = currentSession;
+        const currentQ = questions[currentIndex];
+        currentSession.answered = false;
+
+        // Cập nhật thanh tiến độ
+        document.getElementById('quizCounter').textContent = `Câu ${currentIndex + 1}/${questions.length}`;
+        const percent = ((currentIndex) / questions.length) * 100;
+        document.getElementById('quizProgressFill').style.width = `${percent}%`;
+
+        // Hiển thị nội dung câu hỏi
+        document.getElementById('questionTopic').textContent = currentQ.topic;
+        document.getElementById('questionText').textContent = currentQ.q;
+
+        // Ẩn giải thích và nút tiếp theo
+        const expBox = document.getElementById('explanationBox');
+        expBox.style.display = 'none';
+        expBox.className = 'explanation-box';
+        document.getElementById('nextBtnWrap').style.display = 'none';
+
+        // Render 4 đáp án A, B, C, D
+        const prefixes = ['A', 'B', 'C', 'D'];
+        const optionsList = document.getElementById('optionsList');
+        optionsList.innerHTML = '';
+
+        currentQ.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `
+                <span class="option-prefix">${prefixes[idx]}</span>
+                <span>${opt.text}</span>
+            `;
+            btn.onclick = () => selectAnswer(idx);
+            optionsList.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedIndex) {
+        if (currentSession.answered) return;
+        currentSession.answered = true;
+
+        const { questions, currentIndex } = currentSession;
+        const currentQ = questions[currentIndex];
+        const buttons = document.querySelectorAll('#optionsList .option-btn');
+        const isCorrect = currentQ.options[selectedIndex].isCorrect;
+
+        buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (currentQ.options[idx].isCorrect) {
+                btn.classList.add('correct');
+            } else if (idx === selectedIndex && !isCorrect) {
+                btn.classList.add('wrong');
+            }
+        });
+
+        const expBox = document.getElementById('explanationBox');
+        if (isCorrect) {
+            currentSession.score++;
+            playSound('correct');
+            expBox.className = 'explanation-box correct-exp';
+            expBox.innerHTML = `<strong>✅ CHÍNH XÁC!</strong><br>${currentQ.exp}`;
+        } else {
+            playSound('wrong');
+            expBox.className = 'explanation-box wrong-exp';
+            expBox.innerHTML = `<strong>❌ CHƯA ĐÚNG RỒI!</strong><br>${currentQ.exp}`;
+        }
+        expBox.style.display = 'block';
+
+        // Hiển thị nút chuyển câu
+        const nextBtn = document.getElementById('nextQuestionBtn');
+        if (currentIndex + 1 < questions.length) {
+            nextBtn.textContent = 'Câu tiếp theo ➔';
+        } else {
+            nextBtn.textContent = 'Xem kết quả lượt làm 🏁';
+        }
+        document.getElementById('nextBtnWrap').style.display = 'flex';
+    }
+
+    function nextQuestion() {
+        currentSession.currentIndex++;
+        if (currentSession.currentIndex < currentSession.questions.length) {
+            renderCurrentQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        document.getElementById('quizProgressFill').style.width = '100%';
+        const { level, score, questions } = currentSession;
+        const total = questions.length;
+        const isPerfect = (score === total);
+
+        const circle = document.getElementById('resultScoreCircle');
+        const heading = document.getElementById('resultHeading');
+        const subtext = document.getElementById('resultSubtext');
+        const dreamBox = document.getElementById('dreamReminderBox');
+
+        circle.textContent = `${score}/${total}`;
+
+        if (level === 1) {
+            if (isPerfect) {
+                progress.lvl1PerfectCount++;
+                playSound('levelup');
+                if (progress.lvl1PerfectCount >= 3) {
+                    progress.lvl2Unlocked = true;
+                    heading.textContent = "🎉 CHÚC MỪNG! ĐÃ MỞ KHÓA CẤP ĐỘ 2!";
+                    subtext.textContent = `Tuyệt vời ${studentInfo.name}! Em đã hoàn thành đủ 3 lượt đạt điểm tuyệt đối 12/12 ở Cấp độ 1 và chính thức mở khóa Cấp độ 2 (Vận dụng 7-8 điểm).`;
+                } else {
+                    heading.textContent = `🌟 Tuyệt đối 12/12! (${progress.lvl1PerfectCount}/3 lượt)`;
+                    subtext.textContent = `Xuất sắc lắm ${studentInfo.name}! Em cần thêm ${3 - progress.lvl1PerfectCount} lượt đạt 12/12 nữa để khắc sâu công thức và mở khóa Cấp độ 2 nhé!`;
+                }
+            } else {
+                heading.textContent = "💪 Cố gắng thêm chút nữa nhé!";
+                subtext.textContent = `Lượt này em đạt ${score}/12 câu. Để tích lũy sao mở khóa Cấp độ 2, em cần đạt tuyệt đối 12/12 câu. Hãy đọc kỹ các giải thích vừa rồi và thử lại ngay nào!`;
+            }
+        } else if (level === 2) {
+            if (isPerfect) {
+                progress.lvl2Completed = true;
+                progress.lvl3Unlocked = true;
+                playSound('levelup');
+                heading.textContent = "🚀 XUẤT SẮC! ĐÃ MỞ KHÓA CẤP ĐỘ 3!";
+                subtext.textContent = `Chúc mừng ${studentInfo.name}! Em đã vượt qua cả câu hỏi gài bẫy của Cấp độ 2 với số điểm tuyệt đối 5/5. Cấp độ 3 (9-10 điểm) đã sẵn sàng chờ em!`;
+            } else {
+                heading.textContent = "⚡ Sắp vượt qua Cấp độ 2 rồi!";
+                subtext.textContent = `Em đạt ${score}/5 câu. Hãy cẩn thận với các bẫy đơn vị và bản chất lực căng dây/thang máy để đạt 5/5 và mở khóa Cấp độ 3 nhé!`;
+            }
+        } else if (level === 3) {
+            if (isPerfect) {
+                progress.lvl3Completed = true;
+                playSound('levelup');
+                heading.textContent = "👑 ĐỈNH CAO! CHINH PHỤC HOÀN TOÀN 3 CẤP ĐỘ!";
+                subtext.textContent = `Thật đáng tự hào ${studentInfo.name} lớp ${studentInfo.className}! Em đã chinh phục trọn vẹn cả 3 cấp độ Động lực học Vật lí 10.`;
+            } else {
+                heading.textContent = "🔥 Thử thách Vận Dụng Cao!";
+                subtext.textContent = `Em đạt ${score}/5 câu ở cấp độ khó nhất. Hãy xem lại phân tích lực và thử sức lại để đạt 5/5 nhé!`;
+            }
+        }
+
+        dreamBox.innerHTML = `✨ Nhắc nhở mục tiêu: <strong>${studentInfo.name}</strong> đang hướng tới mốc <strong>${studentInfo.target} điểm Vật lí</strong> để chạm tay vào ước mơ trở thành <strong>${studentInfo.dream}</strong>! Mỗi lượt làm lại là một bước tiến gần hơn tới ước mơ!`;
+
+        switchScreen('screenResult');
+    }
+
+    function retryCurrentLevel() {
+        startQuiz(currentSession.level);
+    }
+</script>
+
+</body>
+</html>
